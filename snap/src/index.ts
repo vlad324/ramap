@@ -1,5 +1,10 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 
+type InitiateOnRampResponse = {
+  id: string,
+  redirectUrl: string
+}
+
 type PaymentStatus = {
   id: string
   status?: string
@@ -59,13 +64,16 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
         `&webhookStatusUrl=${webhookStatusUrl}` +
         '';
 
-      return Promise.resolve(onRampUrl);
+      return Promise.resolve({
+        id: paymentId,
+        redirectUrl: onRampUrl,
+      } as InitiateOnRampResponse);
     case 'queryStatus':
-      if (!paymentId) {
-        throw new Error("On ramp wasn't initiated");
+      if (!request.paymentId) {
+        throw new Error("PaymentId is missing");
       }
 
-      return fetch('https://us-central1-ramap-5041d.cloudfunctions.net/getPaymentStatus/' + paymentId)
+      return fetch('https://us-central1-ramap-5041d.cloudfunctions.net/getPaymentStatus/' + request.paymentId)
         .then(response => response.json())
         .then(response => response as PaymentStatus);
     default:
