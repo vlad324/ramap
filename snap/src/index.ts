@@ -7,7 +7,7 @@ type InitiateOnRampResponse = {
 
 type PaymentStatus = {
   id: string
-  status?: string
+  status: string
 }
 
 const supportedAssets = [
@@ -46,13 +46,11 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
     case 'initiateOnRamp':
       paymentId = crypto.randomUUID();
 
-      const addresses = await wallet.request({ method: 'eth_requestAccounts' });
-      const walletAddress = addresses[0];
       const chainId = await wallet.request({ method: 'eth_chainId' });
 
       const swapAsset = encodeURIComponent(mapSwapAssets(chainId, request.asset));
       const swapAmount = encodeURIComponent(request.amount);
-      const userAddress = encodeURIComponent(walletAddress);
+      const userAddress = encodeURIComponent(request.walletAddress);
       const hostAppName = encodeURIComponent('Ramap');
       const webhookStatusUrl = encodeURIComponent('https://us-central1-ramap-5041d.cloudfunctions.net/handleWebhook/' + paymentId);
 
