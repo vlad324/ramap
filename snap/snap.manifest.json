@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "proposedName": "MetaMask on-ramp snap",
   "description": "The snap provides on ramp functionality out of the box",
+  "proposedName": "MetaMask on-ramp snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/vlad324/ramap.git"
   },
   "source": {
-    "shasum": "Fy6ACr5jdgO2in5k1WYUs397Yc2DTBbpiBDZqkBvlbk=",
+    "shasum": "jIKNICrVNVesdSKdjn212pbPopCRvStx8uWUdvjtdlU=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -17,7 +17,6 @@
       }
     }
   },
-  "initialPermissions": {
-  },
+  "initialPermissions": {},
   "manifestVersion": "0.1"
 }
