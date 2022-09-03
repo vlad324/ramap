@@ -47,7 +47,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
       const swapAmount = encodeURIComponent(request.amount);
       const userAddress = encodeURIComponent(walletAddress);
       const hostAppName = encodeURIComponent('Ramap');
-      const webhookStatusUrl = encodeURIComponent('https://c4e5-31-61-163-250.eu.ngrok.io');
+      const webhookStatusUrl = encodeURIComponent('https://us-central1-ramap-5041d.cloudfunctions.net/handleWebhook/' + id);
 
       const onRampUrl = 'https://widget.hackaton.ramp-network.org?' +
         `hostAppName=${hostAppName}` +
