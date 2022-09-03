@@ -7,7 +7,7 @@
     "url": "https://github.com/vlad324/ramap.git"
   },
   "source": {
-    "shasum": "jIKNICrVNVesdSKdjn212pbPopCRvStx8uWUdvjtdlU=",
+    "shasum": "3YiIE0eAdP4v9+Zt982neBxj5P6lmukhmtIlu4yf8S8=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -17,6 +17,8 @@
       }
     }
   },
-  "initialPermissions": {},
+  "initialPermissions": {
+    "endowment:network-access": {}
+  },
   "manifestVersion": "0.1"
 }

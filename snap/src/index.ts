@@ -1,8 +1,8 @@
 import { OnRpcRequestHandler } from '@metamask/snap-types';
 
-type InitiateOnRampRequest = {
-  id: string,
-  redirectUrl: string,
+type PaymentStatus = {
+  id: string
+  status?: string
 }
 
 const supportedAssets = [
@@ -34,10 +34,12 @@ const mapSwapAssets = (chainId: string, asset: string): string => {
   return result;
 }
 
+let paymentId: string;
+
 export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
   switch (request.method) {
     case 'initiateOnRamp':
-      const id = crypto.randomUUID();
+      paymentId = crypto.randomUUID();
 
       const addresses = await wallet.request({ method: 'eth_requestAccounts' });
       const walletAddress = addresses[0];
@@ -47,7 +49,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
       const swapAmount = encodeURIComponent(request.amount);
       const userAddress = encodeURIComponent(walletAddress);
       const hostAppName = encodeURIComponent('Ramap');
-      const webhookStatusUrl = encodeURIComponent('https://us-central1-ramap-5041d.cloudfunctions.net/handleWebhook/' + id);
+      const webhookStatusUrl = encodeURIComponent('https://us-central1-ramap-5041d.cloudfunctions.net/handleWebhook/' + paymentId);
 
       const onRampUrl = 'https://widget.hackaton.ramp-network.org?' +
         `hostAppName=${hostAppName}` +
@@ -57,12 +59,15 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
         `&webhookStatusUrl=${webhookStatusUrl}` +
         '';
 
-      return Promise.resolve({
-        id: id,
-        redirectUrl: onRampUrl,
-      } as InitiateOnRampRequest);
+      return Promise.resolve(onRampUrl);
     case 'queryStatus':
-      throw new Error('Not implemented');
+      if (!paymentId) {
+        throw new Error("On ramp wasn't initiated");
+      }
+
+      return fetch('https://us-central1-ramap-5041d.cloudfunctions.net/getPaymentStatus/' + paymentId)
+        .then(response => response.json())
+        .then(response => response as PaymentStatus);
     default:
       throw new Error('Method not found.');
   }

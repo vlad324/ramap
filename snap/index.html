@@ -1,69 +1,71 @@
 <!doctype html>
 <html>
-  </head>
+<head>
     <title>Hello, Snaps!</title>
-    <link rel="icon" type="image/svg" href="./images/icon.svg"/>
-  </head>
+    <link rel="icon" type="image/svg" href="./images/icon.svg" />
+</head>
 
-  <body>
-    <h1>Hello, Snaps!</h1>
-    <details>
-      <summary>Instructions</summary>
-      <ul>
-        <li>First, click "Connect". Then, try out the other buttons!</li>
-        <li>Please note that:</li>
-        <ul>
-          <li>
-            The <code>snap.manifest.json</code> and <code>package.json</code> must be located in the server root directory...
-          </li>
-          <li>
-            The Snap bundle must be hosted at the location specified by the <code>location</code> field of <code>snap.manifest.json</code>.
-          </li>
-        </ul>
-      </ul>
-    </details>
-    <br/>
+<body>
+<h1>Test snaps page</h1>
+<br />
 
-    <button class="connect">Connect</button>
-    <button class="sendHello">Send Hello</button>
-  </body>
+<button class="connect">Connect</button>
+<button class="initiateOnRamp">Initiate on-ramp</button>
+<button class="queryStatus">Query status</button>
+</body>
 
-  <script>
-    const snapId = `local:${window.location.href}`;
+<script>
+  const snapId = `local:${window.location.href}`;
 
-    const connectButton = document.querySelector('button.connect')
-    const sendButton = document.querySelector('button.sendHello')
+  const connectButton = document.querySelector('button.connect')
+  const initiateOnRampButton = document.querySelector('button.initiateOnRamp')
+  const queryStatusButton = document.querySelector('button.queryStatus')
 
-    connectButton.addEventListener('click', connect)
-    sendButton.addEventListener('click', send)
+  connectButton.addEventListener('click', connect)
+  initiateOnRampButton.addEventListener('click', initiateOnRamp)
+  queryStatusButton.addEventListener('click', queryStatus)
 
-    // here we get permissions to interact with and install the snap
-    async function connect () {
-      await ethereum.request({
-        method: 'wallet_enable',
-        params: [{
-          wallet_snap: { [snapId]: {} },
+  async function connect() {
+    await ethereum.request({
+      method: 'wallet_enable',
+      params: [{
+        wallet_snap: { [snapId]: {} },
+      }]
+    })
+  }
+
+  async function initiateOnRamp() {
+    try {
+      const response = await ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: [snapId, {
+          method: 'initiateOnRamp',
+          amount: 10000000000000000,
+          asset: 'ETH',
         }]
-      })
-    }
+      });
 
-    // here we call the snap's "hello" method
-    async function send () {
-      try {
-        const response = await ethereum.request({
-          method: 'wallet_invokeSnap',
-          params: [snapId, {
-            method: 'initiateOnRamp',
-            amount: 10000000000000000,
-            asset: 'ETH',
-          }]
-        });
-
-        console.log(response);
-      } catch (err) {
-        console.error(err)
-        alert('Problem happened: ' + err.message || err)
-      }
+      console.log(response);
+    } catch (err) {
+      console.error(err)
+      alert('Problem happened: ' + err.message || err)
     }
-  </script>
+  }
+
+  async function queryStatus() {
+    try {
+      const response = await ethereum.request({
+        method: 'wallet_invokeSnap',
+        params: [snapId, {
+          method: 'queryStatus',
+        }]
+      });
+
+      console.log(response);
+    } catch (err) {
+      console.error(err)
+      alert('Problem happened: ' + err.message || err)
+    }
+  }
+</script>
 </html>
