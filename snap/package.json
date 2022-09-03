@@ -1,14 +1,14 @@
 {
-  "name": "template-typescript-snap",
+  "name": "ramap",
   "version": "1.0.0",
   "private": true,
-  "description": "The 'Hello, world!' of MetaMask Snaps, now written in TypeScript.",
+  "description": "MetaMask on-ramp snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-typescript-snap.git"
+    "url": "https://github.com/vlad324/ramap.git"
   },
   "license": "MIT",
-  "main": "src/index.ts",
+  "main": "./src/index.ts",
   "files": [
     "dist/",
     "images/",
@@ -17,14 +17,8 @@
   "scripts": {
     "build": "mm-snap build",
     "build:clean": "yarn clean && yarn build",
-    "build:website": "node ./scripts/build-website.js",
     "clean": "rimraf 'dist/*'",
-    "lint": "yarn lint:eslint && yarn lint:misc --check",
-    "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "serve": "mm-snap serve",
-    "test": "echo 'TODO'"
+    "serve": "mm-snap serve"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
