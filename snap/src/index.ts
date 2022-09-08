@@ -48,13 +48,14 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
 
       const chainId = await wallet.request({ method: 'eth_chainId' });
 
+      const url = request.url || 'https://widget.hackaton.ramp-network.org';
       const swapAsset = encodeURIComponent(mapSwapAssets(chainId, request.asset));
       const swapAmount = encodeURIComponent(request.amount);
       const userAddress = encodeURIComponent(request.walletAddress);
       const hostAppName = encodeURIComponent('Ramap');
       const webhookStatusUrl = encodeURIComponent('https://us-central1-ramap-5041d.cloudfunctions.net/handleWebhook/' + paymentId);
 
-      const onRampUrl = 'https://widget.hackaton.ramp-network.org?' +
+      const onRampUrl = `${url}?` +
         `hostAppName=${hostAppName}` +
         `&swapAsset=${swapAsset}` +
         `&swapAmount=${swapAmount}` +
