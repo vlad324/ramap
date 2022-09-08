@@ -20,15 +20,21 @@ const supportedAssets = [
 const mapSwapAssets = (chainId: string, asset: string): string => {
   let chainName = '';
   switch (chainId) {
+    case '0x1': // mainnet
+    case '0x3': // ropsten
     case '0x4': // rinkeby
+    case '0x5': // görli
       chainName = 'ETH';
       break;
+    case '0x89': // matic mumbai
     case '0x13881': // matic mumbai
       chainName = 'MATIC';
       break;
     default:
       throw new Error('Unsupported chain');
   }
+
+  // todo: fetch supported assets
 
   const result = chainName + '_' + asset;
   if (supportedAssets.indexOf(result) === -1) {
@@ -48,7 +54,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => 
 
       const chainId = await wallet.request({ method: 'eth_chainId' });
 
-      const url = request.url || 'https://widget.hackaton.ramp-network.org';
+      const url = request.url || 'https://buy.ramp.network/';
       const swapAsset = encodeURIComponent(mapSwapAssets(chainId, request.asset));
       const swapAmount = encodeURIComponent(request.amount);
       const userAddress = encodeURIComponent(request.walletAddress);
